@@ -1,110 +1,36 @@
 # TAI
 
-
 https://github.com/user-attachments/assets/0a1979ab-f093-447d-8fe7-bcf6830051ee
 
+**A better way to manage your AI coding agents.**
 
-**Your AI Agent Command Center**
+There are plenty of AI agent suites out there, but most of them feel clunky, lack real-time visibility, or just don't fit the way I actually work. TAI is my personal take on what an AI agent dashboard should be — built with a focus on quality-of-life and efficiency above everything else. It's actively evolving as I strip out friction and add the features that actually matter.
 
-Manage multiple AI coding agents working in parallel on an infinite canvas. See what each agent is working on, their status, and jump in when they need help.
+## Why TAI?
 
-## The Problem
+Running multiple AI agents across different tasks shouldn't feel like juggling terminal tabs. TAI puts every agent on an infinite canvas where you can see exactly what's happening at a glance — no tab switching, no guesswork, no wasted time.
 
-You want to run 8 Claude agents simultaneously - each working on a different ticket, in isolated branches. But:
-- Terminal tabs are chaos
-- You can't see who's stuck at a glance
-- Context switching is painful
-- No way to organize by project/team
+## What It Does
 
-## The Solution
+### Visual Agent Dashboard
+Every agent lives as a card on a drag-and-drop canvas. You see its current status (working, idle, waiting for input, calling tools), the git branch it's on, and the directory it's operating in — all without clicking into anything.
 
-TAI gives you a visual command center where each agent is a node on a canvas:
+### Multi-Agent Orchestration
+Spin up as many agents as you need — Claude Code, OpenCode, or Ralph Loop — each running in parallel. Spawn them individually or in bulk, restart them with custom args, and let TAI handle session persistence so nothing is lost between restarts.
 
-- **At-a-glance status**: See which agents are working, idle, or need input
-- **Ticket integration**: Start sessions from Linear tickets (more integrations coming)
-- **Branch isolation**: Each agent works in its own git worktree
-- **Organized workspace**: Categories, custom colors, drag-and-drop layout
+### Workspace Organization
+Group agents into categories by project or team, assign custom names and colors, and arrange everything on the canvas however makes sense to you. The layout persists across sessions.
 
-## Installation
+### Real-Time Status Tracking
+TAI hooks directly into agent processes to track state changes as they happen. For Claude Code agents, a bundled plugin provides precise status detection through hooks rather than relying on terminal output parsing.
 
-```bash
-# Install globally
-npm install -g @fallom/tai
-tai
+### Integrated Terminal
+Click any agent node to drop into its live terminal. Full xterm.js integration with real-time I/O streaming over WebSocket — it's like having every terminal open at once without the mess.
 
-# Or run without installing
-npx @fallom/tai
-bunx @fallom/tai
-```
+### Ticket-Driven Workflows (Coming Soon)
+Linear integration is in progress — start sessions directly from tickets, auto-create isolated branches, and keep ticket context visible on each agent node.
 
-## Quick Start
-
-1. Run `tai` in your project directory
-2. Browser opens at `http://localhost:6969`
-3. Click "+" to spawn agents (Claude Code, OpenCode, or Ralph Loop)
-4. Click any node to open its terminal
-5. Drag nodes to organize, create categories to group them
-
-## Features
-
-### Canvas Management
-- Infinite canvas for organizing agents
-- Drag-and-drop positioning with snap-to-grid
-- Categories (folders) for grouping agents by team/project with persistent sizing
-- Custom names, colors, and icons per agent
-- Persistent layout across restarts
-
-### Agent Monitoring
-- Real-time status: Running, Idle, Needs Input, Tool Calling
-- Git branch display per agent
-- Directory/repo info
-- Redesigned node cards for better at-a-glance visibility
-
-### Session Management
-- Spawn multiple agents at once (placed in horizontal row beside existing nodes)
-- Restart sessions with custom arguments
-- Session persistence and restore
-- Version check and empty state UI
-
-### Coming Soon: Linear Integration
-- Start sessions directly from Linear tickets
-- Auto-create isolated branches per ticket
-- Git worktree support for parallel work
-- Ticket info displayed on agent nodes
-
-## How It Works
-
-```
-┌─────────────────────────────────────────────────────┐
-│                    TAI Canvas                     │
-│  ┌─────────┐  ┌─────────┐  ┌─────────┐             │
-│  │ Agent 1 │  │ Agent 2 │  │ Agent 3 │             │
-│  │ PROJ-12 │  │ PROJ-34 │  │  IDLE   │             │
-│  │ Working │  │ Waiting │  │         │             │
-│  └─────────┘  └─────────┘  └─────────┘             │
-│                                                      │
-│  ┌─ Frontend Team ──────────────────────┐           │
-│  │  ┌─────────┐  ┌─────────┐           │           │
-│  │  │ Agent 4 │  │ Agent 5 │           │           │
-│  │  └─────────┘  └─────────┘           │           │
-│  └──────────────────────────────────────┘           │
-└─────────────────────────────────────────────────────┘
-```
-
-TAI runs a local server that:
-- Spawns PTY sessions for each AI agent
-- Tracks agent state via terminal output parsing
-- Streams terminal I/O over WebSocket
-- Persists everything to `.tai/` in your project
-
-## Tech Stack
-
-- **Runtime**: Bun
-- **Backend**: Hono + WebSockets + bun-pty
-- **Frontend**: React + React Flow + xterm.js + Framer Motion
-- **State**: Zustand
-
-## Development
+## Getting Started
 
 ```bash
 git clone https://github.com/TharunSaravanan/TAI.git
@@ -113,49 +39,33 @@ cd TAI
 bun install
 cd client && bun install && cd ..
 
-bun run dev  # Server on 4242, UI on 6969
+bun run dev  # Server on :4242, UI on :6969
 ```
 
-### Testing with the Claude Code Plugin
-
-For development, TAI automatically loads the plugin from the repo's `claude-code-plugin/` directory if present. Just run `bun run dev` and the plugin will be injected when spawning Claude agents.
-
-You can also test manually:
-```bash
-claude --plugin-dir $(pwd)/claude-code-plugin
-```
+Open `http://localhost:6969`, hit "+" to spawn an agent, and you're running.
 
 ## Requirements
 
 - Bun 1.0+
-- One of: Claude Code, OpenCode, or Ralph Loop
+- At least one supported agent CLI: Claude Code, OpenCode, or Ralph Loop
 
-### Claude Code Plugin (Auto-installed)
+The Claude Code plugin is auto-installed on first run — no setup needed.
 
-TAI automatically pulls and installs the Claude Code plugin when you run it for the first time. This enables precise status detection (Working, Using Tools, Idle, Waiting for Input) via Claude Code hooks instead of terminal output parsing.
+## Tech Stack
 
-No manual installation required - just run `tai` and the plugin is set up automatically.
+- **Runtime**: Bun
+- **Backend**: Hono + WebSockets + bun-pty
+- **Frontend**: React + React Flow + xterm.js + Framer Motion
+- **State**: Zustand
 
-See [claude-code-plugin/README.md](./claude-code-plugin/README.md) for more details.
+## Roadmap
 
-### Optional: Ralph Loop
+This is an ongoing project. The goal is to make TAI the most efficient and ergonomic way to run parallel AI agents. Planned improvements include:
 
-[Ralph](https://github.com/frankbria/ralph-claude-code) is an autonomous development loop that runs Claude Code repeatedly until all tasks are complete. To use it with TAI:
-
-```bash
-# Install Ralph globally
-git clone https://github.com/frankbria/ralph-claude-code.git
-cd ralph-claude-code
-./install.sh
-
-# In your project, set up Ralph
-cd your-project
-ralph-setup .
-
-# Then select "Ralph Loop" when creating an agent in TAI
-```
-
-Ralph includes rate limiting, circuit breakers, and intelligent exit detection to prevent runaway loops.
+- Linear / GitHub Issues integration for ticket-driven workflows
+- Smarter agent lifecycle management
+- Better notification and alerting when agents need attention
+- Performance and UX refinements across the board
 
 ## License
 
