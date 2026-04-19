@@ -1,4 +1,4 @@
-# OpenUI
+# TAI
 
 
 https://github.com/user-attachments/assets/0a1979ab-f093-447d-8fe7-bcf6830051ee
@@ -18,7 +18,7 @@ You want to run 8 Claude agents simultaneously - each working on a different tic
 
 ## The Solution
 
-OpenUI gives you a visual command center where each agent is a node on a canvas:
+TAI gives you a visual command center where each agent is a node on a canvas:
 
 - **At-a-glance status**: See which agents are working, idle, or need input
 - **Ticket integration**: Start sessions from Linear tickets (more integrations coming)
@@ -29,17 +29,17 @@ OpenUI gives you a visual command center where each agent is a node on a canvas:
 
 ```bash
 # Install globally
-npm install -g @fallom/openui
-openui
+npm install -g @fallom/tai
+tai
 
 # Or run without installing
-npx @fallom/openui
-bunx @fallom/openui
+npx @fallom/tai
+bunx @fallom/tai
 ```
 
 ## Quick Start
 
-1. Run `openui` in your project directory
+1. Run `tai` in your project directory
 2. Browser opens at `http://localhost:6969`
 3. Click "+" to spawn agents (Claude Code, OpenCode, or Ralph Loop)
 4. Click any node to open its terminal
@@ -76,7 +76,7 @@ bunx @fallom/openui
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│                    OpenUI Canvas                     │
+│                    TAI Canvas                     │
 │  ┌─────────┐  ┌─────────┐  ┌─────────┐             │
 │  │ Agent 1 │  │ Agent 2 │  │ Agent 3 │             │
 │  │ PROJ-12 │  │ PROJ-34 │  │  IDLE   │             │
@@ -91,11 +91,11 @@ bunx @fallom/openui
 └─────────────────────────────────────────────────────┘
 ```
 
-OpenUI runs a local server that:
+TAI runs a local server that:
 - Spawns PTY sessions for each AI agent
 - Tracks agent state via terminal output parsing
 - Streams terminal I/O over WebSocket
-- Persists everything to `.openui/` in your project
+- Persists everything to `.tai/` in your project
 
 ## Tech Stack
 
@@ -107,8 +107,8 @@ OpenUI runs a local server that:
 ## Development
 
 ```bash
-git clone https://github.com/Fallomai/openui.git
-cd openui
+git clone https://github.com/TharunSaravanan/TAI.git
+cd TAI
 
 bun install
 cd client && bun install && cd ..
@@ -118,7 +118,7 @@ bun run dev  # Server on 4242, UI on 6969
 
 ### Testing with the Claude Code Plugin
 
-For development, OpenUI automatically loads the plugin from the repo's `claude-code-plugin/` directory if present. Just run `bun run dev` and the plugin will be injected when spawning Claude agents.
+For development, TAI automatically loads the plugin from the repo's `claude-code-plugin/` directory if present. Just run `bun run dev` and the plugin will be injected when spawning Claude agents.
 
 You can also test manually:
 ```bash
@@ -132,15 +132,15 @@ claude --plugin-dir $(pwd)/claude-code-plugin
 
 ### Claude Code Plugin (Auto-installed)
 
-OpenUI automatically pulls and installs the Claude Code plugin when you run it for the first time. This enables precise status detection (Working, Using Tools, Idle, Waiting for Input) via Claude Code hooks instead of terminal output parsing.
+TAI automatically pulls and installs the Claude Code plugin when you run it for the first time. This enables precise status detection (Working, Using Tools, Idle, Waiting for Input) via Claude Code hooks instead of terminal output parsing.
 
-No manual installation required - just run `openui` and the plugin is set up automatically.
+No manual installation required - just run `tai` and the plugin is set up automatically.
 
 See [claude-code-plugin/README.md](./claude-code-plugin/README.md) for more details.
 
 ### Optional: Ralph Loop
 
-[Ralph](https://github.com/frankbria/ralph-claude-code) is an autonomous development loop that runs Claude Code repeatedly until all tasks are complete. To use it with OpenUI:
+[Ralph](https://github.com/frankbria/ralph-claude-code) is an autonomous development loop that runs Claude Code repeatedly until all tasks are complete. To use it with TAI:
 
 ```bash
 # Install Ralph globally
@@ -152,7 +152,7 @@ cd ralph-claude-code
 cd your-project
 ralph-setup .
 
-# Then select "Ralph Loop" when creating an agent in OpenUI
+# Then select "Ralph Loop" when creating an agent in TAI
 ```
 
 Ralph includes rate limiting, circuit breakers, and intelligent exit detection to prevent runaway loops.

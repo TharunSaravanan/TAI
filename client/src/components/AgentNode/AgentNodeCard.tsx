@@ -1,5 +1,6 @@
-import { MessageSquare, WifiOff, GitBranch, Folder, Wrench } from "lucide-react";
+import { GitBranch, Folder, Wrench } from "lucide-react";
 import { AgentStatus } from "../../stores/useStore";
+import { Stickman } from "./Stickman";
 
 // Status config with visual priority levels
 const statusConfig: Record<AgentStatus, { label: string; color: string; bgColor: string; isActive?: boolean; needsAttention?: boolean }> = {
@@ -121,23 +122,6 @@ export function AgentNodeCard({
         style={{ backgroundColor: statusInfo.bgColor }}
       >
         <div className="flex items-center gap-2">
-          {/* Status indicator - animated ring for active */}
-          <div className="relative flex items-center justify-center">
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{ backgroundColor: statusInfo.color }}
-            />
-            {isActive && (
-              <div
-                className="absolute w-3 h-3 rounded-full animate-ping"
-                style={{
-                  backgroundColor: statusInfo.color,
-                  opacity: 0.4,
-                  animationDuration: '1.5s'
-                }}
-              />
-            )}
-          </div>
           <span className="text-xs font-medium" style={{ color: statusInfo.color }}>
             {statusInfo.label}
           </span>
@@ -149,12 +133,7 @@ export function AgentNodeCard({
             </span>
           )}
         </div>
-        {status === "waiting_input" && (
-          <MessageSquare className="w-3.5 h-3.5" style={{ color: statusInfo.color }} />
-        )}
-        {status === "disconnected" && (
-          <WifiOff className="w-3.5 h-3.5" style={{ color: statusInfo.color }} />
-        )}
+        <Stickman status={status} color={statusInfo.color} size={32} />
       </div>
 
       <div className="p-3 relative">

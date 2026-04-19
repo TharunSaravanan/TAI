@@ -13,6 +13,7 @@ import "@xyflow/react/dist/style.css";
 import { Plus } from "lucide-react";
 
 import { useStore } from "./stores/useStore";
+import { requestNotificationPermission, notifyStatusChange } from "./utils/notifications";
 import { AgentNode } from "./components/AgentNode/index";
 import { CategoryNode } from "./components/CategoryNode";
 import { Sidebar } from "./components/Sidebar";
@@ -71,6 +72,8 @@ function AppContent() {
       .then((res) => res.json())
       .then((agents) => setAgents(agents))
       .catch(console.error);
+
+    requestNotificationPermission();
   }, [setAgents, setLaunchCwd]);
 
   // Poll for status updates every second to catch any missed WebSocket messages
@@ -87,6 +90,8 @@ function AppContent() {
               if (existing && existing.status !== sessionData.status) {
                 console.log(`[poll] Updating ${sessionData.nodeId} status: ${existing.status} -> ${sessionData.status}`);
                 updateSession(sessionData.nodeId, { status: sessionData.status });
+                const name = existing.customName || existing.agentName || "Agent";
+                notifyStatusChange(sessionData.nodeId, sessionData.status, name);
               }
             }
           }

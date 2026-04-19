@@ -4,6 +4,7 @@ import { FitAddon } from "@xterm/addon-fit";
 import { WebLinksAddon } from "@xterm/addon-web-links";
 import "@xterm/xterm/css/xterm.css";
 import { useStore, AgentStatus } from "../stores/useStore";
+import { notifyStatusChange } from "../utils/notifications";
 
 interface TerminalProps {
   sessionId: string;
@@ -115,11 +116,16 @@ export function Terminal({ sessionId, color, nodeId }: TerminalProps) {
             term.write(msg.data);
           } else if (msg.type === "status") {
             // Handle status updates from plugin hooks
+            const newStatus = msg.status as AgentStatus;
             updateSession(nodeId, {
-              status: msg.status as AgentStatus,
+              status: newStatus,
               isRestored: msg.isRestored,
               currentTool: msg.currentTool,
             });
+            // Play sound + browser notification on meaningful transitions
+            const session = useStore.getState().sessions.get(nodeId);
+            const name = session?.customName || session?.agentName || "Agent";
+            notifyStatusChange(nodeId, newStatus, name);
           }
         } catch (e) {
           term.write(event.data);

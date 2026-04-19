@@ -278,7 +278,8 @@ export function createSession(params: {
     gitBranch = getGitBranch(workingDir);
   }
 
-  const ptyProcess = spawnPty("/bin/bash", [], {
+  const shell = process.platform === "win32" ? (process.env.COMSPEC || "cmd.exe") : "/bin/bash";
+  const ptyProcess = spawnPty(shell, [], {
     name: "xterm-256color",
     cwd: workingDir,
     env: {
